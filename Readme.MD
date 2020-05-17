@@ -10,6 +10,8 @@
 - web3.eth.getAccounts().then((i) => i)
 - app.address
 - truffle test
+- to get accounts in a list - web3.eth.getAccounts().then((acc) => accounts=acc)
+- party 0 to bid - app.bid(1, 1000, {from: accounts[0]})
 
 Reference :
 - dApp university
