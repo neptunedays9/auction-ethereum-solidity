@@ -5,8 +5,8 @@ App = {
 
   init: async function() {
     // below line is required to approve the metamask application explicitly
-    ethereum.enable();
-    
+    await ethereum.enable();
+
     return await App.initWeb3();
   },
 
@@ -57,6 +57,7 @@ App = {
       auctionInstance = instance;
       return auctionInstance.itemsCount();
     }).then((itemsCount) => {
+
       var auctionResults = $("#auctionResults");
       auctionResults.empty();
 
@@ -76,12 +77,27 @@ App = {
 
       loader.hide();
       content.show();
+      // return auctionInstance.items(App.account);
     }).catch((error) => {
       console.warn(error)
     });
-
- 
   },
+
+  bidAuction: function() {
+    var itemId = 1; // TODO $('#itemSelect').val();
+    var bidAmount = 5000; // TODO $('#bidInput').val();
+  
+    App.contracts.Auction.deployed().then((instance) =>{
+      console.log("APP-ACCOUNT", itemId,  bidAmount, App.account)
+      return instance.bid(itemId, bidAmount, {from : App.account})
+    }).then((result) => {
+      console.log("RESULT", result)
+      $("#content").hide();
+      $("#loader").show();
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
 
 };
 

@@ -25,7 +25,15 @@
         </tbody>
 
       </table>
-      <br>
+      <hr/> 
+      <form onSubmit="App.bidAuction(); return false;">  
+        <div class="form-group">
+          <label for="bidInputLabel"> Enter bid amount</label>
+          <input id="bidInput"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Bid</button>
+        <hr />
+      </form>
       <p id="accountAddress" class="text-center"></p>
     </div>
 

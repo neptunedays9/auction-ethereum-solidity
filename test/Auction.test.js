@@ -41,4 +41,42 @@ contract("Auction", (accounts) => {
             })
         })
     });
+
+    it("should throw exception for invalid item", () => {
+        var itemId;
+        var bidAmount = 1000;
+        return Auction.deployed().then((i) => {
+            auctionInstance = i;
+            itemId = 99;
+        }).then(() => { 
+            return web3.eth.getAccounts().then((acc) => {
+                return auctionInstance.bid(itemId, bidAmount, {from : acc[0]})
+            }).catch((error) => {
+                 assert(error.message.indexOf('revert') >= 0);
+            })
+        })
+    });
+
+
+
+    it("should not update if bidAmount is less than the previous", () => {
+        var itemId;
+        var bidAmount = 1000;
+        var accounts;
+        return Auction.deployed().then((i) => {
+            auctionInstance = i;
+            itemId = 1;
+        }).then(() => { 
+            return web3.eth.getAccounts().then((acc) => {
+                accounts = acc;
+                return auctionInstance.bid(itemId, bidAmount + 1, {from : accounts[0]})
+            }).then((txn) => {
+                return web3.eth.getAccounts().then((acc) => {
+                    return auctionInstance.bid(itemId, bidAmount, {from : accounts[0]})
+            }).catch((error) => {
+                assert(error.message.indexOf('revert') >= 0)
+            })
+        })
+    })
+    });
 });

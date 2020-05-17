@@ -10,7 +10,7 @@ contract Auction {
     }
 
     mapping(uint => Item) public items;
-
+ 
     uint public itemsCount;
 
     function addItem (string memory _name) private {
@@ -25,8 +25,11 @@ contract Auction {
     function bid(uint _itemId, uint bidAmount) public {
 
         // add the check, only if the amount is more, assign it
+        require(bidAmount > items[_itemId].maxBidAmount);
+
+        require(_itemId > 0 && _itemId <= itemsCount);
+
         items[_itemId].maxBidAmount = bidAmount;
         items[_itemId].maxBidPartyId = msg.sender;
-
     }
 }
