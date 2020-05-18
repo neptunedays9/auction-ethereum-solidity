@@ -13,6 +13,12 @@
 - to get accounts in a list - web3.eth.getAccounts().then((acc) => accounts=acc)
 - party 0 to bid - app.bid(1, 1000, {from: accounts[0]})
 
+Start UI
+-npm run dev
+
+Troubleshooting
+- MetaMask import of Ganache account via private key
+
 Reference :
 - dApp university
 - ethereum.enable() to be added in app.js as metamask user should explicitly allow the application to access to the accounts

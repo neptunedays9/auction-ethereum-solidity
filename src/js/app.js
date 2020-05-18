@@ -3,30 +3,28 @@ App = {
   contracts: {},
   account: '0x0',
 
-  init: async function() {
+  init: function() {
     // below line is required to approve the metamask application explicitly
-    await ethereum.enable();
+    ethereum.enable();
 
-    return await App.initWeb3();
+    return App.initWeb3();
   },
 
-  initWeb3: async function() {
-    if(typeof web3 !== undefined) {
+  initWeb3: function() {
+    if(typeof web3 !== 'undefined') {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
 
     } else {
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
       web3 = new Web3(App.web3Provider);
     }
-    console.log("web3", web3)
     return App.initContract();
   },
 
   initContract: function() {
     
     $.getJSON("Auction.json", (auction) => {
-      console.log("web3-1", web3)
       App.contracts.Auction = TruffleContract(auction);
       App.contracts.Auction.setProvider(App.web3Provider);
 
@@ -45,9 +43,7 @@ App = {
     content.hide();
 
     web3.eth.getAccounts((err, account) => {
-      console.log(account, err)
       if(err === null) {
-        // console.log(account)
         App.account = account;
         $("#accountAddress").html("Your account" + account);
       }
@@ -64,7 +60,6 @@ App = {
       for (var i = 1; i <= itemsCount; i++) {
 
         auctionInstance.items(i).then( (item) => {
-          // console.log(item[1])
           var id = item[0];
           var name = item[1];
           var bidAmount = item[2];
@@ -85,13 +80,14 @@ App = {
 
   bidAuction: function() {
     var itemId = 1; // TODO $('#itemSelect').val();
-    var bidAmount = 5000; // TODO $('#bidInput').val();
+    var bidAmount = $('#bidInput').val();
   
     App.contracts.Auction.deployed().then((instance) =>{
       console.log("APP-ACCOUNT", itemId,  bidAmount, App.account)
-      return instance.bid(itemId, bidAmount, {from : App.account})
+      return instance.bid(itemId, bidAmount, {from :App.coount});
+
     }).then((result) => {
-      console.log("RESULT", result)
+      // console.log("RESULT", result)
       $("#content").hide();
       $("#loader").show();
     }).catch((error) => {
