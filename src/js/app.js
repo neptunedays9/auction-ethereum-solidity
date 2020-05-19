@@ -28,6 +28,8 @@ App = {
       App.contracts.Auction = TruffleContract(auction);
       App.contracts.Auction.setProvider(App.web3Provider);
 
+      // App.listenEvent();
+
       return App.render();
     });
 
@@ -93,6 +95,22 @@ App = {
     }).catch((error) => {
       console.log(error);
     })
+  },
+
+  listenEvent: function() {
+    console.log("LISTEN-EVENT", event)
+    App.contracts.Auction.deployed((instance) => {
+      console.log("CALL-EVENT", event)
+      instance.bidEvent({}, {
+        fromBlock: 0,
+
+        toBlock: 'latest'
+      }).watch((error, event) => {
+        console.log("EVENT-TRIGGERED", event)
+        App.render();
+      })
+
+    });
   }
 
 };

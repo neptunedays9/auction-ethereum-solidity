@@ -35,9 +35,12 @@ contract("Auction", (accounts) => {
             return web3.eth.getAccounts().then((acc) => {
                 return auctionInstance.bid(itemId, bidAmount, {from : acc[0]})
             }).then((txn) => {
-                 return auctionInstance.items(itemId)
+                assert.equal(txn.logs.length, 1, "bid was triggered")
+                assert.equal(txn.logs[0].event, "bidEvent", "bid generated an event")
+                assert.equal(txn.logs[0].args._itemId.toNumber(), itemId, "bid was for the correct item")
+                return auctionInstance.items(itemId)
             }).then((item) => {
-                 assert.equal(item[2], 1000, "bidAmount is updated")
+                assert.equal(item[2], 1000, "bidAmount is updated")
             })
         })
     });
