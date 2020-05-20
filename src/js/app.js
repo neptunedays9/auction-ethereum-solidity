@@ -28,7 +28,7 @@ App = {
       App.contracts.Auction = TruffleContract(auction);
       App.contracts.Auction.setProvider(App.web3Provider);
 
-      // App.listenEvent();
+      App.listenEvent();
 
       return App.render();
     });
@@ -85,11 +85,11 @@ App = {
     var bidAmount = $('#bidInput').val();
   
     App.contracts.Auction.deployed().then((instance) =>{
-      console.log("APP-ACCOUNT", itemId,  bidAmount, App.account)
+
       return instance.bid(itemId, bidAmount, {from :App.coount});
 
     }).then((result) => {
-      // console.log("RESULT", result)
+
       $("#content").hide();
       $("#loader").show();
     }).catch((error) => {
@@ -98,9 +98,9 @@ App = {
   },
 
   listenEvent: function() {
-    console.log("LISTEN-EVENT", event)
-    App.contracts.Auction.deployed((instance) => {
-      console.log("CALL-EVENT", event)
+
+    App.contracts.Auction.deployed().then((instance) => {
+
       instance.bidEvent({}, {
         fromBlock: 0,
 
